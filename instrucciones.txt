@@ -1,0 +1,266 @@
+===============================================================================
+                    PROYECTO BRICK BREAKER - INSTRUCCIONES
+===============================================================================
+
+DESCRIPCIÓN DEL PROYECTO
+========================
+Brick Breaker es un juego clásico de Breakout donde el jugador controla una barra 
+(paddle) para rebotar una bola y destruir ladrillos. El objetivo es eliminar todos 
+los ladrillos sin perder todas las vidas.
+
+REQUERIMIENTOS TÉCNICOS
+========================
+
+1. CONFIGURACIÓN DE LA VENTANA DE JUEGO
+   - Resolución: 500 x 400 píxeles
+   - Título de la ventana: "Brick Breaker"
+   - Game loop a 60 FPS (16.67ms por frame)
+   - Fondo negro (#000000)
+
+2. LADRILLOS (BRICKS)
+   - Cantidad total: 10 ladrillos
+   - Separación uniforme entre ellos (recomendado: 5-10px)
+   - Efecto visual y sonoro al colisionar
+   
+   Colores según paleta de recursos:
+   - Usar sprites del 01 al 20 para colores predefinidos
+   - Tras agotar sprites de colores, usar sprite amarillo (21) y colorearlo:
+     * Primero fucsia (color de control)
+     * Luego colores aleatorios
+   
+   Puntos de vida:
+   - 5 ladrillos con vida fija = 1 impacto
+   - 5 ladrillos restantes con vida aleatoria entre 1 y 10
+   - Al recibir daño, cambiar sprite al de "daño" (sprites 31-61)
+   - Mostrar desgaste visual progresivo
+
+3. BARRA (PADDLE)
+   - Posición fija en eje Y: 5px por encima de la línea verde punteada
+   - Control: flechas izquierda/derecha
+   - Limitar movimiento dentro de los bordes de la ventana (0-500px)
+   - Usar sprite de paddle (sprites 31-40 para diferentes estilos)
+
+4. LÍNEA VERDE PUNTEADA
+   - Ubicación: 5px arriba de la barra
+   - Estilo: línea punteada (dash), grosor 2px
+   - Color: verde (#00FF00)
+   - Patrón: 5px línea, 5px espacio
+
+5. BOLA (BALL)
+   - Estado inicial: posicionada encima de la barra
+   - Lanzamiento: al presionar flecha "Arriba"
+   - Rebotes:
+     * En paredes superior, izquierda y derecha
+     * En paddle, ajustando ángulo según punto de impacto
+     * En ladrillos, restando vida y cambiando sprite
+   - Velocidad:
+     * Valor inicial configurable (nivel 1 = 1, nivel máximo = 7)
+     * Aumentar gradualmente tras cada rebote con la barra
+     * Restablecer velocidad inicial al perder una vida
+   - Zona de muerte:
+     * Un cuadro negro horizontal debajo de la barra cubre todo el ancho
+     * Si la bola lo toca, se destruye
+
+6. VIDAS Y GESTIÓN DE JUEGO
+   - Vidas totales: 3
+   - Al destruir todas las bolas en pantalla, restar 1 vida
+   - Reposicionar la bola en posición inicial tras perder vida
+   - Fin de juego cuando vidas = 0
+
+7. PUNTUACIÓN Y RÉCORD
+   - Al destruir cada ladrillo: +100 puntos
+   - Mostrar puntuación local durante la partida
+   - Al finalizar, mostrar tabla de récords (top 10):
+     1. proo – 10000
+     2. tester – 500
+     3. noob – 100
+     4-10: espacios vacíos para nuevos registros
+   - Si se supera un récord, solicitar nombre y actualizar la lista
+   - Almacenar récords en localStorage
+
+8. INTERFAZ DE USUARIO (UI) Y ESTADOS
+   - Pantallas: Menú principal, Juego, Pausa, Game Over, Récords
+   - Botón/tecla para pausar y reanudar (ESC o P)
+   - Mostrar en pantalla: puntuación, vidas restantes, nivel
+   - Usar sprites de UI (sprites 41-61 para elementos de interfaz)
+
+9. AUDIO
+   - Efectos: rebote, destrucción ladrillo, pérdida de vida, game over
+   - Música de fondo opcional con volumen ajustable
+   - Formato recomendado: .wav o .mp3
+
+10. ESTRUCTURA DEL PROYECTO
+    - Separar código en módulos o clases:
+      * Game: clase principal del juego
+      * Paddle: lógica de la barra
+      * Ball: lógica de la bola
+      * Brick: lógica de los ladrillos
+      * UI: interfaz de usuario
+      * Audio: gestión de sonidos
+      * Data: persistencia de datos
+    - Carpeta de assets: sprites, sonidos, fuentes, configuraciones
+
+11. PERSISTENCIA DE DATOS
+    - Almacenar configuraciones y récords en localStorage
+    - Cargar al iniciar la aplicación
+    - Estructura de datos recomendada:
+      {
+        "records": [
+          {"name": "proo", "score": 10000},
+          {"name": "tester", "score": 500},
+          {"name": "noob", "score": 100}
+        ],
+        "settings": {
+          "volume": 0.8,
+          "difficulty": 1
+        }
+      }
+
+12. DOCUMENTACIÓN
+    - README con:
+      • Descripción del proyecto
+      • Requisitos
+      • Instrucciones de instalación y uso
+      • Controles del juego
+
+13. PRUEBAS Y DEPURACIÓN
+    - Casos de prueba para:
+      • Colisiones (bola-ladrillo, bola-paddle, bola-pared)
+      • Límites de la ventana
+      • Gestión de vidas y game over
+      • Actualización de récords
+    - Logs de depuración opcionales
+
+14. CARACTERÍSTICAS ADICIONALES (OPCIONALES)
+    - Niveles con diseños de ladrillos variables
+    - Power-ups: agrandar barra, multibola, aumento/disminución de velocidad
+    - Efectos de partículas y animaciones extra
+
+RECURSOS GRÁFICOS DISPONIBLES
+=============================
+
+Ubicación: /recursos/
+
+1. SPRITE SHEET PRINCIPAL
+   - Archivo: Breakout_Tile_Free.png (346KB)
+   - XML de coordenadas: Breakout_Tile_Free.xml
+   - Licencia: Creative Commons Zero (CC0)
+   - Fuente: ImagineLabs.Rocks
+
+2. SPRITES INDIVIDUALES (PNG/)
+   - 61 archivos PNG individuales (01-Breakout-Tiles.png a 61-Breakout-Tiles.png)
+   - Tamaños variables según el contenido
+   - Organizados por categorías:
+     * 01-20: Ladrillos de colores predefinidos
+     * 21: Sprite amarillo base para colorear
+     * 22-30: Elementos de juego adicionales
+     * 31-40: Paddles y barras
+     * 41-61: Elementos de UI y efectos
+
+3. FORMATOS ADICIONALES
+   - Vector/: Archivos EPS y SVG para escalabilidad
+   - Sprite Sheet/: Sprite sheet completo con XML
+
+CONTROLES DEL JUEGO
+===================
+- Flecha IZQUIERDA: Mover barra hacia la izquierda
+- Flecha DERECHA: Mover barra hacia la derecha
+- Flecha ARRIBA: Lanzar bola (solo cuando está en posición inicial)
+- ESC o P: Pausar/Reanudar juego
+- ENTER: Confirmar en menús
+- ESPACIO: Reiniciar juego (en pantalla de game over)
+
+ESTRUCTURA DE ARCHIVOS RECOMENDADA
+==================================
+brick-breaker/
+├── index.html
+├── css/
+│   ├── style.css
+│   └── ui.css
+├── js/
+│   ├── game.js
+│   ├── paddle.js
+│   ├── ball.js
+│   ├── brick.js
+│   ├── ui.js
+│   ├── audio.js
+│   └── data.js
+├── assets/
+│   ├── sprites/
+│   │   └── (copiar archivos PNG relevantes)
+│   ├── sounds/
+│   │   ├── bounce.wav
+│   │   ├── brick_break.wav
+│   │   ├── life_lost.wav
+│   │   └── game_over.wav
+│   └── fonts/
+├── recursos/
+│   └── (archivos originales)
+└── README.md
+
+CONSIDERACIONES DE IMPLEMENTACIÓN
+=================================
+
+1. RENDIMIENTO
+   - Usar requestAnimationFrame para el game loop
+   - Optimizar colisiones con bounding boxes
+   - Precargar sprites y sonidos
+
+2. COMPATIBILIDAD
+   - Funcionar en navegadores modernos (Chrome, Firefox, Safari, Edge)
+   - Responsive design para diferentes tamaños de pantalla
+   - Fallbacks para navegadores sin soporte de audio
+
+3. ACCESIBILIDAD
+   - Soporte para teclado completo
+   - Indicadores visuales claros
+   - Texto alternativo para elementos gráficos
+
+4. SEGURIDAD
+   - Validar entrada de usuario para nombres de récord
+   - Sanitizar datos antes de guardar en localStorage
+   - Manejo de errores robusto
+
+FASES DE DESARROLLO RECOMENDADAS
+=================================
+
+FASE 1: Estructura básica
+- Configurar proyecto y archivos
+- Implementar game loop básico
+- Crear clases principales
+
+FASE 2: Mecánicas core
+- Implementar paddle y ball
+- Sistema de colisiones básico
+- Ladrillos estáticos
+
+FASE 3: Gameplay completo
+- Sistema de vidas
+- Puntuación
+- Efectos visuales
+
+FASE 4: UI y persistencia
+- Menús y pantallas
+- Sistema de récords
+- Configuraciones
+
+FASE 5: Pulido
+- Audio
+- Efectos adicionales
+- Testing y debugging
+
+FASE 6: Documentación
+- README completo
+- Comentarios en código
+- Guía de usuario
+
+NOTAS IMPORTANTES
+=================
+- Los recursos gráficos están bajo licencia CC0, libres para uso comercial
+- Mantener consistencia visual con los sprites proporcionados
+- Implementar sistema de colisiones preciso para mejor gameplay
+- Considerar escalabilidad para futuras características
+- Documentar cualquier desviación de los requerimientos originales
+
+===============================================================================
+

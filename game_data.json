@@ -1,0 +1,22 @@
+{
+  "records": [
+    {
+      "name": "proo",
+      "score": 10000
+    },
+    {
+      "name": "tester",
+      "score": 500
+    },
+    {
+      "name": "noob",
+      "score": 100
+    }
+  ],
+  "settings": {
+    "volume": 0.8,
+    "sound_enabled": true,
+    "music_enabled": true,
+    "difficulty": 1
+  }
+}
